@@ -1,14 +1,13 @@
 //For vscode install vscode-icons & vagrant
-
 trem# vagrant -v
-
+//Gives version
 # config.vm.box ## OS
 # config.vm.provider ## virtualbox
 # config.vm.network ## how host sees box
 # config.vm.synced_folder ## acces files
 # config.vm.provision ## what to setup
 
-//Create folder
+//Create folder.
 trem# mkdir vagrant
 trem# cd vagrant
 -----
@@ -135,4 +134,51 @@ term# mysql -u root -p //password is root
 mysql# create database test
 --> ;
 mysql# use test;
-mysql# create table posts()
+mysql# create table posts(id INT AUTO_INCREMENT, text VARCHAR(250) NOT NULL, primary key (id));
+mysql# show tables
+--> ;
+//must be 
++-------------------+
+| Tables_intest |+-------------------+
+| posts               |1 row in set (0.00 sec)
+mysql# insert into posts(text) values('Test Post 1');
+mysql# insert into posts(text) values('Test Post 2');
+mysql# select * from posts;
++----+
+| id | text
++----+
+| 1  | Test Post 1 |
+| 2  | Test Post 2 |
+mysql# quit;
+term# exit
+
+//edit index.html into index.php
+//edit file in <body> <h1>Vag_Doc</h1><?php phpinfo(); ?>//test in browser
+//add to the head of index.php file
+<?php
+		$dbhost = 'localhost:3306';
+		$dbuser = 'root';
+		$dbpass = 'root';
+		$conn = mysqli_connect($dbhost, #dbuser, $dbpass);
+		
+		if(! $conn ) {
+			die('Could not connect: " . mysqli_error());
+		}
+		echo 'Connected successfully';
+		mysqli_select_db($conn, 'test');
+		$query = 'SELECT * FROM posts';
+		$result = mysqli_query($conn, $query);
+		
+		mysqli_close($conn);
+	?>
+//under <h1>
+<?php if(mysqli_num_rows($result) > 0): ?>
+	<ul>
+		<?php while($row = mysqli_fetch_ibject($result)): ?>
+			<li><?php echo $row->text; ?></li>
+		<?php endwhile; ?>
+	</ul>
+<?php else: ?>
+	<P>No Posts</p>
+<?php endif; ?>
+//reload
