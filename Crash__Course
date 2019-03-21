@@ -1,0 +1,138 @@
+//For vscode install vscode-icons & vagrant
+
+trem# vagrant -v
+
+# config.vm.box ## OS
+# config.vm.provider ## virtualbox
+# config.vm.network ## how host sees box
+# config.vm.synced_folder ## acces files
+# config.vm.provision ## what to setup
+
+//Create folder
+trem# mkdir vagrant
+trem# cd vagrant
+-----
+https://app.vagrantup.com/boxes/search
+-----
+trem# vagrant init ubuntu/trusty64
+//Open Vagrantfile
+//Make it looks like that:
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure("2") do |config|
+# Box Settings
+config.vm.box = "ubuntu/trustuy64"
+# config.vm.box_check_update = false
+# Network Settings
+# config.vm.network "forwarded_port", guest: 80, host: 8080
+# config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+# config.vm.network "private_network", ip: "192.168.33.10"
+# config.vm.network "public_network"
+# Folder Settings
+# config.vm.synced_folder "../data", "/vagrant_data"
+# Provider Settings
+config.vm.provider "virtualbox" do |vb|
+# # Display the VirtualBox GUI when booting the machine
+# vb.gui = true
+# # Customize the amount of CPU on the VM:
+# vb.cpu = 4
+# # Customize the amount of memory on the VM:
+# vb.memory = "1024"
+end
+# Provision Settings
+# config.vm.provision "shell", inline: <<-SHELL
+# apt-get update
+# apt-get install -y apache2
+# SHELL
+end
+
+term# vagrant up
+//it will create instance in virtualbox
+term# vagrant destory
+//delete box
+term# vagrant suspend
+term# vagrant resume
+term# vagrant ssh
+term# sudo apt update && install -y git && install -y apache2 // this can be done in Vagrantfile Provision Settings
+term# ls /var/www
+term# exit
+
+//config Vagrantfile by uncomment first network config.vm.network
+term# vagrant reload
+http://localhost:8080
+//or uncomment #3 Network Settings row & make connect by ip
+*nix term# code /etc/hosts
+admin right win term# C:\Windows\System32\drivers\etc
+//open hosts & add ip 192.168.33.10 vagrant.local www.vagrant.local
+//SAVE
+
+term# vagrant ssh
+term# sudo nano /var/www/html/index.html
+//change Header if it necessary
+
+//go to Vagrantfile & uncomment Folder Settings
+config.vm.synced_folder ".", "/var/www/html", :nfs => { :mount_options => ["dmode=777", "fmode=666"] }
+term# exit
+term# vagrant reload
+//Vagrantfile becomes root file!!//Than we can create index.html where Vagrantfile based and make basic HTML code.
+
+term# vagrant destroy
+
+//in Vagrantfile #Provision Setting write
+config.vm.provision "shell, path: "bootstrap.sh"
+//create bootstrap.sh in Vagrantfile folder and write there all you need to install:
+
+## BASIC LAMP Stack
+# Update Packages
+apt-get update
+
+# Upgrade Packages
+apt-get upgrade
+
+# Basic Linux Stuff
+apt-get install -y git
+
+# Apache
+apt-get install -y apache2
+
+# Enable Apache Mods
+a2enmod rewrite
+
+# Add Ondrej PPA Repo
+apt-add-repository ppa:ondrej/php
+apt-get update
+
+# Install PHP
+apt-get install -y php7.2
+
+# PHP Apache Mod
+apt-get install -y libapache2-mod-php7.2
+
+# Restart Apache
+service apache2 restart
+
+# PHP Mods
+apt-get install -y php7.2-common
+apt-get install -y php7.2-mcrypt
+apt-get install -y php7.2-zip
+
+# Set MySQL User & Pass
+debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+
+# Install MySQL
+apt-get install -y mysql-server
+
+# PHP-MYSQL lib
+apt-get install -y php7.2-mysql
+
+# Restart Apache
+sudo service apache2 restart
+
+term# vagrant up
+// create mysql db
+term# mysql -u root -p //password is root
+mysql# create database test
+--> ;
+mysql# use test;
+mysql# create table posts()
