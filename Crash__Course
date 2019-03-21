@@ -1,5 +1,5 @@
 //For vscode install vscode-icons & vagrant
-trem# vagrant -v
+term# vagrant -v
 //Gives version
 # config.vm.box ## OS
 # config.vm.provider ## virtualbox
@@ -8,12 +8,12 @@ trem# vagrant -v
 # config.vm.provision ## what to setup
 
 //Create folder.
-trem# mkdir vagrant
-trem# cd vagrant
+term# mkdir vagrant
+term# cd vagrant
 -----
 https://app.vagrantup.com/boxes/search
 -----
-trem# vagrant init ubuntu/trusty64
+term# vagrant init ubuntu/trusty64
 //Open Vagrantfile
 //Make it looks like that:
 # -*- mode: ruby -*-
